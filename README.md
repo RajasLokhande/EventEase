@@ -61,3 +61,39 @@ Open your terminal or command prompt and run these commands:
 ```bash
 git clone [https://github.com/RajasLokhande/EventEase.git](https://github.com/RajasLokhande/EventEase.git)
 cd EventEase
+```
+<hr>
+### Step 2: Set Up the Database 🗄️
+
+1. Open **MySQL Workbench** or your command line.
+2. Create a new database (e.g., named `eventease_db`).
+3. Open the backend project in your IDE.
+4. Navigate to `src/main/resources/application.properties`.
+5. Update the settings to match your local MySQL credentials:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/eventease_db
+spring.datasource.username=YOUR_MYSQL_USERNAME
+spring.datasource.password=YOUR_MYSQL_PASSWORD
+spring.jpa.hibernate.ddl-auto=update
+```
+<hr>
+
+### Step 3: Start the Backend 🚀
+
+You can start the server using one of two methods:
+
+* **Option A (Recommended):** Open `EventEaseApplication.java` in your IDE and click **Run**.
+* **Option B (Terminal):** Navigate to the main backend folder and run:
+    ```bash
+    mvn spring-boot:run
+    ```
+
+### Step 4: Open the Frontend 🌐
+
+1. Navigate to the `FrontEnd` folder in the project files.
+2. Open `index.html` in your web browser.
+
+> **Tip:** For the best experience and to ensure API connections work smoothly, we recommend using the **Live Server** extension in VS Code (runs on localhost).
+
+
