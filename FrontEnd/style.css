@@ -1,0 +1,235 @@
+/* --- Global & Reset --- */
+body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; color: #333; transition: background-color 0.3s ease; }
+section { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; position: relative; }
+
+/* FIX: Added .center style for proper alignment on the home page */
+.center {
+    /* Ensures the content container is centered within the flex parent (#home) */
+    text-align: center;
+    max-width: 600px; /* Optional: limits width for better appearance */
+}
+
+/* --- Backgrounds & Layouts --- */
+#home { background: radial-gradient(circle at top right, rgba(110, 197, 189, 0.3) 1%, transparent 50%), radial-gradient(circle at bottom left, rgba(162, 219, 215, 0.3) 1%, transparent 50%), #f0f8ff; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+#attendeeLogin, #attendeeRegister, #eventDetailPage, #ticketConfirmPage, #feedbackPage { background-color: #e6f7ff; display: flex; justify-content: center; align-items: center; }
+#organizerLogin, #createEvent, #organizerRegister { background-color: #fffaf0; display: flex; justify-content: center; align-items: center; }
+#eventsPage, #organizerDashboard { display: grid; grid-template-columns: 200px 1fr; padding: 0; }
+#organizerDashboard { background-color: #fffaf0; }
+
+/* FIX: Added style for the stats grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* --- Card/Container Styles --- */
+.card-container { width: 100%; max-width: 700px; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: center; box-sizing: border-box; }
+.login-card { max-width: 400px; }
+.card-container.large-card { max-width: 800px; }
+.card-container.medium-card { max-width: 580px; }
+.card-container.small-card { max-width: 450px; }
+.card-container h2 { font-weight: 600; margin-bottom: 5px; color: #374151;}
+.card-container p { font-size: 14px; color: #6b7280; margin-bottom: 30px;}
+
+/* --- Navigation & Actions --- */
+.top-action { position: absolute; top: 20px; left: 20px; color: #374151; font-size: 16px; cursor: pointer; display: flex; align-items: center; text-decoration: none; font-weight: 500; }
+.top-action.right { left: auto; right: 20px; background-color: #f3f4f6; padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); color: #374151; position: static !important;}
+.top-action-icon { margin-right: 5px; font-size: 20px; }
+.login-icon-box { width: 56px; height: 56px; border-radius: 12px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 32px; color: white; }
+.login-icon-box.home-icon { background-color: #58C9B9; width: 60px; height: 60px; border-radius: 15px; }
+.login-icon-box.attendee-icon { background-color: #00bcd4; }
+.login-icon-box.organizer-icon { background-color: #ffb74d; }
+
+/* --- Forms & Inputs --- */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; text-align: left; }
+.full-width { grid-column: 1 / 3; }
+.form-wrapper-left { width: 100%; text-align: left; }
+.form-wrapper-left div { margin-bottom: 20px; }
+.form-wrapper-left div:last-of-type { margin-bottom: 0; }
+label { display: block; font-size: 14px; color: #6b7280; margin-bottom: 5px; font-weight: 500; }
+input, textarea, select { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #e5e7eb; font-size: 16px; box-sizing: border-box; background-color: #f9fafb; color: #374151; }
+
+/* --- Buttons --- */
+.btn-login { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; margin-top: 30px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; color: white; cursor: pointer; transition: background-color 0.2s; }
+.btn-attendee-main { background-color: #00bcd4; }
+.btn-organizer-main { background-color: #ffb74d; }
+.btn-icon-right { font-size: 18px !important; vertical-align: middle; }
+.btn-home-attendee { flex: 1; padding: 15px 20px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; color: white; cursor: pointer; background-color: #58C9B9; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.btn-home-organizer { flex: 1; padding: 15px 20px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; color: white; cursor: pointer; background-color: #F7931E; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.btn-gradient-orange { background: linear-gradient(to right, #ff9800, #ffb74d); margin-top: 40px; }
+.btn-book-ticket { background: linear-gradient(to right, #ff9800, #ff8c00); margin-top: 40px; }
+
+/* --- Dashboard & Sidebar --- */
+.attendee-sidebar, .organizer-sidebar { background-color: #fff; padding: 20px 0; border-right: 1px solid #eee; }
+.dashboard-main-content { padding: 40px; position: relative; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.dashboard-header h1 { font-size: 24px; font-weight: 600; color: #374151; }
+.sidebar-item, .sidebar-item-org { padding: 15px 20px; margin: 5px 0; font-size: 14px; font-weight: 500; color: #6b7280; cursor: pointer; display: flex; align-items: center; }
+.attendee-sidebar-item.active, .attendee-sidebar-item:hover { background-color: #00bcd4; color: white; border-radius: 0 10px 10px 0; }
+.sidebar-item-org.active, .sidebar-item-org:hover { background-color: #ffb74d; color: white; border-radius: 0 10px 10px 0; }
+.sidebar-icon { margin-right: 10px; font-size: 20px !important; }
+
+/* --- Events & Stats --- */
+.events-banner { background: linear-gradient(to right, #00bcd4, #58C9B9); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px; text-align: left; position: relative; }
+.btn-give-feedback { position: absolute; top: 25px; right: 30px; background-color: #ff9800; color: white; padding: 10px 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
+.events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+.event-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); text-align: left; min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; }
+.event-detail-line { display: flex; align-items: center; margin-bottom: 8px; }
+.event-detail-line .material-icons { font-size: 18px; margin-right: 8px; color: #00bcd4; }
+.event-card .price { font-size: 20px; font-weight: 700; color: #ff9800; margin-top: 15px; }
+.btn-view-book { background-color: #00bcd4; color: white; padding: 12px; border: none; border-radius: 8px; width: 100%; margin-top: 15px; font-weight: 600; cursor: pointer;}
+
+/* --- Event Detail Fixes --- */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-top: 30px; }
+
+.detail-item {
+    padding: 15px; border-radius: 10px;
+    display: flex;
+    align-items: center;
+    background-color: #f9fafb;
+    border: 1px solid #eee;
+    gap: 10px;
+    /* Allow content to stack vertically if needed, preventing overflow */
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px; /* Reduced vertical padding */
+}
+.detail-item .detail-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ensure text container takes full item width */
+}
+.detail-item .detail-text strong { font-weight: 600; font-size: 14px; }
+.detail-item .detail-text span { font-size: 16px; margin-top: 2px; } /* Increased value font size for better display */
+
+.detail-item .detail-icon {
+    /* Push icon to the side and make it align nicely */
+    font-size: 28px !important;
+    margin-right: 0;
+    margin-bottom: 5px;
+    color: #00bcd4;
+    width: 100%;
+    text-align: center;
+}
+
+/* Special styling for Price/ID items to match the screenshot better (less text-heavy) */
+.detail-item.price-item, .detail-item.id-item {
+    /* Revert to original center/horizontal alignment for these simple fields */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100px; /* Give them a fixed height to align with their neighbor cells */
+}
+.detail-item.price-item .detail-text, .detail-item.id-item .detail-text {
+    align-items: center;
+}
+.detail-item.price-item .price-tag {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 5px;
+}
+.detail-item.id-item .detail-text span {
+    font-size: 16px;
+    font-weight: 600;
+}
+.detail-item.id-item .detail-icon { color: #58C9B9; }
+.detail-item.price-item .detail-icon { color: #ff9800; }
+
+/* --- Other Styles --- */
+.rating-stars { font-size: 40px; color: #f7931e; cursor: pointer; margin: 20px 0 30px; }
+.stat-card { padding: 25px; border-radius: 15px; background-color: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); display: flex; justify-content: space-between; align-items: center; border: 3px solid; }
+.stat-card.card-blue-purple { border-color: #5e72e4; }
+.stat-card.card-orange { border-color: #f5365c; }
+.stat-card.card-teal { border-color: #2dce89; }
+.stat-card .stat-icon { font-size: 40px !important; opacity: 0.8; }
+.stat-card.card-blue-purple .stat-icon { color: #5e72e4; }
+.stat-card.card-orange .stat-icon { color: #f5365c; }
+.stat-card.card-teal .stat-icon { color: #2dce89; }
+.stat-value { font-size: 32px; font-weight: 700; margin-top: 5px; color: #374151; }
+.cta-banner-org { background: linear-gradient(to right, #f97316, #fb923c); padding: 30px; border-radius: 15px; color: white; margin-top: 30px; }
+.btn-white-outline { background-color: white; color: #f97316; width: auto; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; cursor: pointer; gap: 5px; margin-top: 15px;}
+
+/* Fix for attendee sidebar welcome text */
+.attendee-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    padding: 15px 20px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+/* --- Organizer Table Styles --- */
+.table-container {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Keeps borders rounded */
+    overflow-x: auto; /* Prevents breaking sidebar if table gets too wide */
+}
+
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    text-align: left;
+}
+
+/* Orange Header Theme */
+.dashboard-table thead {
+    background: linear-gradient(to right, #ff9800, #ffb74d);
+    color: white;
+}
+
+.dashboard-table th {
+    padding: 18px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #374151;
+    vertical-align: middle;
+}
+
+/* Hover Effect */
+.dashboard-table tbody tr:hover {
+    background-color: #fffaf0; /* Very light orange tint */
+}
+
+/* Action Buttons inside Table */
+.btn-edit, .btn-delete {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: transform 0.2s;
+}
+
+.btn-edit {
+    background-color: #e0f2fe;
+    color: #0284c7; /* Blue for Edit */
+}
+
+.btn-delete {
+    background-color: #fee2e2;
+    color: #dc2626; /* Red for Delete */
+}
+
+.btn-edit:hover, .btn-delete:hover {
+    transform: scale(1.05);
+}

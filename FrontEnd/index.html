@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventEase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section id="home" style="display:flex;">
+    <div class="center">
+        <div class="login-icon-box home-icon"><span class="material-icons">calendar_today</span></div>
+        <h1>Welcome to EventEase</h1>
+        <p>Simplify your events — whether you're attending or organizing.</p>
+        <div class="button-group">
+            <button class="btn-home-attendee" onclick="showSection('attendeeLogin')"><span class="material-icons">person</span> I'm an Attendee</button>
+            <button class="btn-home-organizer" onclick="showSection('organizerLogin')"><span class="material-icons">business_center</span> I'm an Organizer</button>
+        </div>
+        <p class="footer-text">&copy; 2025 EventEase. All Rights Reserved.</p>
+    </div>
+</section>
+
+<section id="attendeeLogin">
+    <a href="#" class="top-action" onclick="showSection('home'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back</a>
+    <div class="card-container login-card">
+        <div class="login-icon-box attendee-icon"><span class="material-icons">arrow_forward</span></div>
+        <h2>Attendee Login</h2>
+        <p>Sign in to explore and book events</p>
+        <div class="form-wrapper-left">
+            <div><label for="attendeeEmail">Email</label><input type="email" placeholder="your.email@example.com" id="attendeeEmail"></div>
+            <div><label for="attendeePassword">Password</label><input type="password" placeholder="" id="attendeePassword"></div>
+        </div>
+        <button class="btn-login btn-attendee-main" id="attendeeLoginBtn">Login</button>
+        <div class="login-footer">Don't have an account? <a href="#" onclick="showSection('attendeeRegister'); return false;" class="attendee-link">Register as New Attendee</a></div>
+    </div>
+</section>
+
+<section id="attendeeRegister">
+    <a href="#" class="top-action" onclick="showSection('attendeeLogin'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back</a>
+    <div class="card-container">
+        <h2>Attendee Registration</h2>
+        <p>Join EventEase to discover amazing events</p>
+        <div class="form-grid">
+            <div><label for="attId">Attendee ID</label><input type="text" placeholder="ATD001" id="attId"></div>
+            <div><label for="email">Email ID</label><input type="email" placeholder="your.email@example.com" id="email"></div>
+            <div><label for="fname">First Name</label><input type="text" placeholder="John" id="fname"></div>
+            <div><label for="mname">Middle Name</label><input type="text" placeholder="Michael" id="mname"></div>
+            <div><label for="lname">Last Name</label><input type="text" placeholder="Doe" id="lname"></div>
+            <div><label for="phone">Phone Number</label><input type="text" placeholder="+1 234 567 8900" id="phone"></div>
+            <div><label for="dob">Date of Birth</label><input type="date" id="dob" onchange="calculateAge()"></div>
+            <div><label for="age">Age (Auto-calculated)</label><input type="text" id="age" placeholder="" readonly></div>
+            <div class="full-width"><label for="password">Password</label><input type="password" placeholder="" id="password"></div>
+        </div>
+        <button class="btn-login btn-attendee-main" id="attendeeRegisterBtn">Next <span class="material-icons btn-icon-right">arrow_forward</span></button>
+    </div>
+</section>
+
+<section id="organizerLogin">
+    <a href="#" class="top-action" onclick="showSection('home'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back</a>
+    <div class="card-container login-card">
+        <div class="login-icon-box organizer-icon"><span class="material-icons">arrow_forward</span></div>
+        <h2>Organizer Login</h2>
+        <p>Sign in to manage your events</p>
+        <div class="form-wrapper-left">
+            <div><label for="orgEmail">Email</label><input type="email" placeholder="organizer@example.com" id="orgEmail"></div>
+            <div><label for="orgPass">Password</label><input type="password" placeholder="" id="orgPass"></div>
+        </div>
+        <button class="btn-login btn-organizer-main" id="organizerLoginBtn">Log In</button>
+        <div class="login-footer">Don't have an account? <a href="#" onclick="showSection('organizerRegister'); return false;" class="organizer-link">Sign Up</a></div>
+    </div>
+</section>
+
+<section id="organizerRegister">
+    <a href="#" class="top-action" onclick="showSection('organizerLogin'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back</a>
+    <div class="card-container login-card"> <h2>Organizer Registration</h2>
+        <p>Create events and manage attendees</p>
+        <div class="form-wrapper-left">
+            <div><label for="orgIdRegister">Organizer ID</label><input type="text" placeholder="ORG001" id="orgIdRegister"></div>
+            <div><label for="orgEmailRegister">Email</label><input type="email" placeholder="organizer@example.com" id="orgEmailRegister"></div>
+            <div><label for="orgNameRegister">Name</label><input type="text" placeholder="John Doe" id="orgNameRegister"></div>
+            <div><label for="orgPhoneRegister">Contact Number</label><input type="text" placeholder="+1 234 567 8900" id="orgPhoneRegister"></div>
+            <div><label for="orgPassRegister">Password</label><input type="password" placeholder="" id="orgPassRegister"></div>
+        </div>
+        <button class="btn-login btn-organizer-main" id="organizerRegisterBtn">Next <span class="material-icons btn-icon-right">arrow_forward</span></button>
+    </div>
+</section>
+
+<section id="organizerDashboard">
+    <div class="organizer-sidebar">
+        <div class="sidebar-item-org active">
+            <span class="material-icons sidebar-icon">home</span> Dashboard Overview
+        </div>
+        <div class="sidebar-item-org" onclick="openCreateEventPage()">
+            <span class="material-icons sidebar-icon">add</span> Create Event
+        </div>
+    </div>
+
+    <div class="dashboard-main-content">
+        <div class="dashboard-header">
+            <h1 id="organizerWelcomeHeader">Welcome, Organizer!</h1>
+            <a href="#" class="top-action right" onclick="showSection('home'); return false;">
+                <span class="material-icons top-action-icon">logout</span> Logout
+            </a>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card card-blue-purple">
+                <div>
+                    <div class="stat-title">Total Attendees</div>
+                    <div class="stat-value" id="totalAttendees">0</div>
+                </div>
+                <span class="material-icons stat-icon">people</span>
+            </div>
+            <div class="stat-card card-orange">
+                <div>
+                    <div class="stat-title">Events Organized</div>
+                    <div class="stat-value" id="totalEvents">0</div>
+                </div>
+                <span class="material-icons stat-icon">calendar_today</span>
+            </div>
+            <div class="stat-card card-teal">
+                <div>
+                    <div class="stat-title">Total Feedbacks</div>
+                    <div class="stat-value" id="totalFeedbacks">0</div>
+                </div>
+                <span class="material-icons stat-icon">comment</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div style="padding: 20px 20px 10px 20px; font-weight:700; color:#374151; font-size:18px;">
+                Manage Events
+            </div>
+            <table class="dashboard-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="organizerEventTableBody">
+                <tr><td colspan="5" style="text-align:center; padding: 20px;">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cta-banner-org">
+            <h3>Ready to Create Something Amazing?</h3>
+            <p>Design and launch your next event with our easy-to-use event creation tool.</p>
+            <button class="btn-white-outline" onclick="openCreateEventPage()">
+                <span class="material-icons">add</span> Create New Event
+            </button>
+        </div>
+    </div>
+</section>
+
+<section id="createEvent">
+    <a href="#" class="top-action" onclick="showSection('organizerDashboard'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back to Dashboard</a>
+    <div class="card-container large-card">
+        <h2>Create a New Event</h2>
+        <div class="form-grid">
+
+            <input type="hidden" id="eventId">
+
+            <div class="full-width">
+                <label for="eventName">Event Name *</label>
+                <input type="text" placeholder="Tech Conference 2025" id="eventName">
+            </div>
+
+            <div><label for="eventDate">Date (DD/MM/YYYY) *</label><input type="date" id="eventDate"></div>
+            <div><label for="duration">Duration</label><input type="text" placeholder="8 hours" id="duration"></div>
+            <div><label for="budget">Budget</label><input type="text" placeholder="$50,000" id="budget"></div>
+            <div><label for="venueId">Venue ID</label><input type="text" placeholder="VEN001" id="venueId"></div>
+            <div class="full-width"><label for="venueAddress">Venue Address</label><input type="text" placeholder="123 Convention Center, Tech City" id="venueAddress"></div>
+            <div><label for="venueCapacity">Venue Capacity</label><input type="number" placeholder="500" id="venueCapacity"></div>
+            <div><label for="ticketPrice">Ticket Price *</label><input type="text" placeholder="$99" id="ticketPrice"></div>
+        </div>
+        <button class="btn-login btn-gradient-orange" id="createEventBtn">Create Event</button>
+    </div>
+</section>
+
+<section id="eventsPage">
+    <div class="attendee-sidebar">
+        <div class="attendee-header">Welcome, <span id="attendeeWelcomeNameSidebar">Attendee</span>!</div>
+        <div class="sidebar-item active" onclick="showSection('eventsPage')"><span class="material-icons sidebar-icon">home</span> Home</div>
+        <div class="sidebar-item" onclick="showSection('feedbackPage')"><span class="material-icons sidebar-icon">feedback</span> Feedback</div>
+    </div>
+    <div class="dashboard-main-content">
+        <div class="dashboard-header">
+            <h1 id="attendeeWelcomeNameHeader">Welcome, Attendee!</h1>
+            <a href="#" class="top-action right" onclick="showSection('home'); return false;">
+                <span class="material-icons top-action-icon">logout</span> Logout
+            </a>
+        </div>
+        <div class="events-banner">
+            <h3>Your Event Journey Starts Here</h3>
+            <p>Discover and book from our curated selection of events</p>
+            <button class="btn-give-feedback" onclick="showSection('feedbackPage')">Give Feedback</button>
+        </div>
+        <h3 style="font-weight: 600; color: #374151;">Available Events</h3>
+        <div class="events-grid" id="eventList"></div>
+    </div>
+</section>
+
+<section id="eventDetailPage">
+    <a href="#" class="top-action" onclick="showSection('eventsPage'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back to Dashboard</a>
+    <div class="card-container medium-card">
+        <h2 id="detailEventTitle">Music Festival</h2>
+        <div class="detail-grid">
+            <div class="detail-item" id="detailVenue"><span class="material-icons detail-icon">location_on</span><div class="detail-text"><strong>Venue</strong><span>456 Outdoor Arena, Music Valley</span></div></div>
+            <div class="detail-item" id="detailCapacity"><span class="material-icons detail-icon">people</span><div class="detail-text"><strong>Venue Capacity</strong><span>2000 people</span></div></div>
+            <div class="detail-item" id="detailDate"><span class="material-icons detail-icon">calendar_today</span><div class="detail-text"><strong>Date</strong><span>December 20, 2025</span></div></div>
+            <div class="detail-item price-item" id="detailPrice"><span class="material-icons detail-icon">payments</span><div class="detail-text"><strong>Ticket Price</strong><span class="price-tag">$149</span></div></div>
+            <div class="detail-item" id="detailDuration"><span class="material-icons detail-icon">schedule</span><div class="detail-text"><strong>Duration</strong><span>12 hours</span></div></div>
+            <div class="detail-item id-item" id="detailId"><span class="material-icons detail-icon">info</span><div class="detail-text"><strong>Event ID</strong><span>EVT002</span></div></div>
+        </div>
+        <button class="btn-login btn-book-ticket" id="bookTicketBtn">Book Ticket</button>
+    </div>
+</section>
+
+<section id="ticketConfirmPage">
+    <div class="card-container login-card confirm-card small-card">
+        <span class="material-icons confirm-icon">check_circle</span>
+        <h2>Ticket Booked Successfully!</h2>
+        <p>Your ticket for <strong id="bookedEventName">Music Festival</strong> has been confirmed.</p>
+        <p class="date" id="bookedEventDate">Event Date: December 20, 2025</p>
+        <button class="btn-login btn-attendee-main" onclick="showSection('eventsPage')">Exit to Dashboard</button>
+    </div>
+</section>
+
+<section id="feedbackPage">
+    <a href="#" class="top-action" onclick="showSection('eventsPage'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back to Dashboard</a>
+    <div class="card-container login-card feedback-card">
+        <h2>Event Feedback</h2>
+
+        <div class="form-wrapper-left">
+            <div>
+                <label for="feedbackEventSelect">Select Event to Rate</label>
+                <select id="feedbackEventSelect" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; background-color: #f9fafb;">
+                    <option value="" disabled selected>Loading your events...</option>
+                </select>
+            </div>
+
+            <div style="margin-top:20px;"><label>Your Rating</label></div>
+        </div>
+
+        <div class="rating-stars" id="feedbackStars">
+            <span class="material-icons" onclick="setRating(1)">star_border</span>
+            <span class="material-icons" onclick="setRating(2)">star_border</span>
+            <span class="material-icons" onclick="setRating(3)">star_border</span>
+            <span class="material-icons" onclick="setRating(4)">star_border</span>
+            <span class="material-icons" onclick="setRating(5)">star_border</span>
+            <input type="hidden" id="feedbackRating" value="">
+        </div>
+        <div class="form-wrapper-left">
+            <div><label for="feedbackComments">Comments (Optional)</label><textarea id="feedbackComments" placeholder="Share your experience with us..."></textarea></div>
+        </div>
+        <button class="btn-login btn-gradient-orange" id="submitFeedbackBtn">Submit Feedback</button>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
