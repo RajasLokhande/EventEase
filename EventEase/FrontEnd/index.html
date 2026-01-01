@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventEase</title>
+    <title>EventEase Optimized</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -69,22 +69,6 @@
             <div><label for="orgPass">Password</label><input type="password" placeholder="" id="orgPass"></div>
         </div>
         <button class="btn-login btn-organizer-main" id="organizerLoginBtn">Log In</button>
-        <div class="login-footer">Don't have an account? <a href="#" onclick="showSection('organizerRegister'); return false;" class="organizer-link">Sign Up</a></div>
-    </div>
-</section>
-
-<section id="organizerRegister">
-    <a href="#" class="top-action" onclick="showSection('organizerLogin'); return false;"><span class="material-icons top-action-icon">arrow_back</span> Back</a>
-    <div class="card-container login-card"> <h2>Organizer Registration</h2>
-        <p>Create events and manage attendees</p>
-        <div class="form-wrapper-left">
-            <div><label for="orgIdRegister">Organizer ID</label><input type="text" placeholder="ORG001" id="orgIdRegister"></div>
-            <div><label for="orgEmailRegister">Email</label><input type="email" placeholder="organizer@example.com" id="orgEmailRegister"></div>
-            <div><label for="orgNameRegister">Name</label><input type="text" placeholder="John Doe" id="orgNameRegister"></div>
-            <div><label for="orgPhoneRegister">Contact Number</label><input type="text" placeholder="+1 234 567 8900" id="orgPhoneRegister"></div>
-            <div><label for="orgPassRegister">Password</label><input type="password" placeholder="" id="orgPassRegister"></div>
-        </div>
-        <button class="btn-login btn-organizer-main" id="organizerRegisterBtn">Next <span class="material-icons btn-icon-right">arrow_forward</span></button>
     </div>
 </section>
 
@@ -165,7 +149,6 @@
     <div class="card-container large-card">
         <h2>Create a New Event</h2>
         <div class="form-grid">
-
             <input type="hidden" id="eventId">
 
             <div class="full-width">

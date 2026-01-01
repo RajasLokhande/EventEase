@@ -1,21 +1,17 @@
 // --- Global Configuration ---
-const API_BASE_URL = 'http://localhost:8080/api'; // Point to your Spring Boot Server
+const API_BASE_URL = 'http://localhost:8080/api';
 
 // --- Global State ---
-let currentUser = null; // Stores the logged-in user object (Attendee or Organizer)
+let currentUser = null;
 let currentEventId = '';
 let currentEventDate = '';
-let events = []; // Will be populated from Backend
+let events = [];
 
 // --- HELPER: Navigation ---
 window.showSection = (id, data = null) => {
-    // 1. Hide all sections
     document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
-
-    // 2. Show the target section
     document.getElementById(id).style.display = (['organizerDashboard', 'eventsPage'].includes(id)) ? 'grid' : 'flex';
 
-    // 3. Page specific logic
     if (id === 'eventsPage') {
         const firstName = currentUser ? currentUser.firstName : 'Guest';
         document.getElementById('attendeeWelcomeNameSidebar').innerText = firstName;
@@ -30,12 +26,11 @@ window.showSection = (id, data = null) => {
         loadEventDetails(data);
     } else if (id === 'feedbackPage') {
         setRating(0);
-        // Call the new function when opening the page
         loadBookedEventsForFeedback();
     }
 };
 
-// --- HELPER: Age Calculation (Frontend Logic) ---
+// --- HELPER: Age Calculation ---
 window.calculateAge = () => {
     const dob = document.getElementById('dob').value;
     const ageInput = document.getElementById('age');
@@ -61,7 +56,6 @@ window.loadBookedEventsForFeedback = async () => {
 
     try {
         const response = await fetch(`${API_BASE_URL}/bookings/user/${currentUser.id}`);
-
         if (!response.ok) throw new Error("Could not fetch bookings");
 
         const bookings = await response.json();
@@ -124,10 +118,7 @@ const submitFeedback = async () => {
     }
 };
 
-// ************************************************************
-// [POST] Endpoint: /api/auth/attendee/register
-// Purpose: Register a new attendee
-// ************************************************************
+// --- Register Attendee ---
 const registerAttendee = async () => {
     const data = {
         email: document.getElementById('email').value,
@@ -136,7 +127,6 @@ const registerAttendee = async () => {
         phone: document.getElementById('phone').value,
         age: document.getElementById('age').value,
         password: document.getElementById('password').value
-        // Backend can calculate age from DOB if sent, or send DOB directly
     };
 
     try {
@@ -158,10 +148,7 @@ const registerAttendee = async () => {
     }
 };
 
-// ************************************************************
-// [POST] Endpoint: /api/auth/attendee/login
-// Purpose: Authenticate Attendee and get User Details
-// ************************************************************
+// --- Login Attendee ---
 const loginAttendee = async () => {
     const email = document.getElementById('attendeeEmail').value;
     const password = document.getElementById('attendeePassword').value;
@@ -174,7 +161,7 @@ const loginAttendee = async () => {
         });
 
         if (response.ok) {
-            currentUser = await response.json(); // Backend returns User Object (id, name, etc.)
+            currentUser = await response.json();
             showSection('eventsPage');
         } else {
             alert('Invalid Email or Password');
@@ -185,95 +172,7 @@ const loginAttendee = async () => {
     }
 };
 
-// ************************************************************
-// [POST] Endpoint: /api/auth/organizer/register
-// Purpose: Register a new Organizer
-// ************************************************************
-const registerOrganizer = async () => {
-    const data = {
-        email: document.getElementById('orgEmailRegister').value,
-        name: document.getElementById('orgNameRegister').value,
-        phone: document.getElementById('orgPhoneRegister').value,
-        password: document.getElementById('orgPassRegister').value
-    };
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/auth/organizer/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            alert('Organizer Registration Successful!');
-            showSection('organizerLogin');
-        } else {
-            alert('Registration Failed.');
-        }
-    } catch (error) {
-        console.error(error);
-        alert('Server Error.');
-    }
-};
-
-window.deleteEvent = async (id) => {
-    if (!confirm("Are you sure you want to delete this event? This cannot be undone.")) {
-        return;
-    }
-
-    try {
-        // NOTE: You need to add the DELETE endpoint to your Java Controller (see Part 2 below)
-        const response = await fetch(`${API_BASE_URL}/events/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok) {
-            alert("Event deleted successfully!");
-            loadOrganizerEvents(); // Refresh the table
-        } else {
-            alert("Failed to delete event.");
-        }
-    } catch (error) {
-        console.error("Delete error:", error);
-        alert("Server error.");
-    }
-};
-
-window.editEvent = (id) => {
-    // 1. Find the event data from the global 'events' array
-    const event = events.find(e => e.id == id);
-    if (!event) return;
-
-    // 2. Fill the form fields with existing data
-    document.getElementById('eventId').value = event.id; // Crucial: This tells Backend to UPDATE, not CREATE
-    document.getElementById('eventName').value = event.name;
-    document.getElementById('duration').value = event.duration;
-    document.getElementById('venueAddress').value = event.venueAddress;
-    document.getElementById('venueCapacity').value = event.venueCapacity || '';
-    document.getElementById('ticketPrice').value = event.ticketPrice;
-
-    // Date formatting (HTML date input needs YYYY-MM-DD)
-    if(event.date) {
-        const d = new Date(event.date);
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        document.getElementById('eventDate').value = `${yyyy}-${mm}-${dd}`;
-    }
-
-    // 3. Change the Button Text to "Update Event" so the user knows
-    const btn = document.getElementById('createEventBtn');
-    btn.innerText = "Update Event";
-    btn.onclick = createNewEvent; // Re-bind the function if needed
-
-    // 4. Show the form
-    showSection('createEvent');
-};
-
-// ************************************************************
-// [POST] Endpoint: /api/auth/organizer/login
-// Purpose: Authenticate Organizer
-// ************************************************************
+// --- Login Organizer ---
 const loginOrganizer = async () => {
     const email = document.getElementById('orgEmail').value;
     const password = document.getElementById('orgPass').value;
@@ -297,17 +196,14 @@ const loginOrganizer = async () => {
     }
 };
 
-// ************************************************************
-// [GET] Endpoint: /api/events
-// Purpose: Load all available events from database
-// ************************************************************
+// --- Load All Events (Attendee) ---
 window.loadEvents = async () => {
     const eventList = document.getElementById('eventList');
     eventList.innerHTML = '<p style="grid-column:1/-1; text-align:center">Loading Events...</p>';
 
     try {
         const response = await fetch(`${API_BASE_URL}/events`);
-        events = await response.json(); // Store in global variable
+        events = await response.json();
 
         eventList.innerHTML = '';
         events.forEach(event => {
@@ -336,107 +232,7 @@ window.loadEvents = async () => {
     }
 };
 
-// ************************************************************
-// [POST] Endpoint: /api/events
-// Purpose: Create a new event (Organizer Only)
-// ************************************************************
-const createNewEvent = async () => {
-    const eventData = {
-        id: document.getElementById('eventId').value || null, // Allow backend to generate if null
-        name: document.getElementById('eventName').value,
-        date: document.getElementById('eventDate').value,
-        duration: document.getElementById('duration').value,
-        budget: document.getElementById('budget').value,
-        venueName: document.getElementById('venueId').value || null,
-        venueAddress: document.getElementById('venueAddress').value,
-        venueCapacity: document.getElementById('venueCapacity').value,
-        ticketPrice: document.getElementById('ticketPrice').value.replace('$', ''),
-        organizerId: currentUser ? currentUser.id : null // Link event to organizer
-    };
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/events`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(eventData)
-        });
-
-        if (response.ok) {
-            alert('Event Created Successfully!');
-            document.querySelectorAll('#createEvent input').forEach(i => i.value = '');
-            showSection('organizerDashboard');
-        } else {
-            alert('Failed to create event.');
-        }
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-// ************************************************************
-// [POST] Endpoint: /api/bookings
-// Purpose: Book a ticket
-// ************************************************************
-window.confirmTicketBooking = async (eventName) => {
-    const bookingData = {
-        eventId: currentEventId,
-        attendeeId: currentUser ? currentUser.id : 'GUEST',
-        bookingDate: new Date().toISOString()
-    };
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/bookings`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(bookingData)
-        });
-
-        if (response.ok) {
-            // Success Case
-            document.getElementById('bookedEventName').innerText = eventName;
-            document.getElementById('bookedEventDate').innerText = 'Event Date: ' + new Date(currentEventDate).toLocaleDateString();
-            showSection('ticketConfirmPage');
-        } else {
-            // --- FIX IS HERE ---
-            // 1. Read the specific error message sent by the Java Backend
-            const errorMessage = await response.text();
-
-            // 2. Alert the specific message (e.g., "You have already booked this event!")
-            alert(errorMessage);
-        }
-    } catch (error) {
-        console.error(error);
-        alert('Booking System Error: Could not reach server.');
-    }
-};
-
-// ************************************************************
-// [GET] Endpoint: /api/organizers/{id}/stats
-// Purpose: Get dashboard stats (FETCH REAL DATA)
-// ************************************************************
-window.updateOrganizerStats = async () => {
-    if (!currentUser) return;
-
-    try {
-        // 1. Fetch real stats from the new Backend Endpoint
-        const response = await fetch(`${API_BASE_URL}/organizers/${currentUser.id}/stats`);
-
-        if (response.ok) {
-            const stats = await response.json();
-
-            // 2. Update the Dashboard Cards with Real Numbers
-            document.getElementById('totalEvents').innerText = stats.totalEvents;
-            document.getElementById('totalAttendees').innerText = stats.totalAttendees;
-            document.getElementById('totalFeedbacks').innerText = stats.totalFeedbacks;
-        } else {
-            console.warn("Failed to fetch stats");
-        }
-    } catch (error) {
-        console.error("Error updating stats:", error);
-    }
-};
-
-// --- Updated Loader Function ---
+// --- Load Organizer Events (Table) ---
 window.loadOrganizerEvents = async () => {
     const tableBody = document.getElementById('organizerEventTableBody');
     if (!tableBody) return;
@@ -445,12 +241,9 @@ window.loadOrganizerEvents = async () => {
 
     try {
         const response = await fetch(`${API_BASE_URL}/events`);
-
-        // 1. Update the Global Variable with real data
         events = await response.json();
 
-        // 2. CRITICAL: Update Stats NOW
-        await updateOrganizerStats();
+        updateOrganizerStats();
 
         tableBody.innerHTML = '';
 
@@ -459,7 +252,6 @@ window.loadOrganizerEvents = async () => {
             return;
         }
 
-        // 3. Render the Table
         events.forEach(event => {
             const dateString = new Date(event.date).toLocaleDateString();
             tableBody.innerHTML += `
@@ -482,23 +274,144 @@ window.loadOrganizerEvents = async () => {
     }
 };
 
-window.openCreateEventPage = () => {
-    // 1. Clear all inputs
-    document.querySelectorAll('#createEvent input').forEach(i => i.value = '');
+// --- Organizer Stats ---
+window.updateOrganizerStats = async () => {
+    if (!currentUser) return;
 
-    // 2. Reset Button Text to "Create" (in case it was set to "Update")
-    const btn = document.getElementById('createEventBtn');
-    if (btn) {
-        btn.innerText = "Create Event";
+    try {
+        const response = await fetch(`${API_BASE_URL}/organizers/${currentUser.id}/stats`);
+
+        if (response.ok) {
+            const stats = await response.json();
+            document.getElementById('totalEvents').innerText = stats.totalEvents;
+            document.getElementById('totalAttendees').innerText = stats.totalAttendees;
+            document.getElementById('totalFeedbacks').innerText = stats.totalFeedbacks;
+        } else {
+            console.warn("Failed to fetch stats");
+        }
+    } catch (error) {
+        console.error("Error updating stats:", error);
+    }
+};
+
+// --- Create/Update Event ---
+const createNewEvent = async () => {
+    const eventData = {
+        id: document.getElementById('eventId').value || null,
+        name: document.getElementById('eventName').value,
+        date: document.getElementById('eventDate').value,
+        duration: document.getElementById('duration').value,
+        budget: document.getElementById('budget').value,
+        venueName: document.getElementById('venueId').value || null,
+        venueAddress: document.getElementById('venueAddress').value,
+        venueCapacity: document.getElementById('venueCapacity').value,
+        ticketPrice: document.getElementById('ticketPrice').value.replace('$', ''),
+        organizerId: currentUser ? currentUser.id : null
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/events`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData)
+        });
+
+        if (response.ok) {
+            alert('Event Saved Successfully!');
+            document.querySelectorAll('#createEvent input').forEach(i => i.value = '');
+            showSection('organizerDashboard');
+        } else {
+            alert('Failed to save event.');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// --- Delete Event ---
+window.deleteEvent = async (id) => {
+    if (!confirm("Are you sure you want to delete this event? This cannot be undone.")) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/events/${id}`, { method: 'DELETE' });
+
+        if (response.ok) {
+            alert("Event deleted successfully!");
+            loadOrganizerEvents();
+        } else {
+            alert("Failed to delete event.");
+        }
+    } catch (error) {
+        console.error("Delete error:", error);
+        alert("Server error.");
+    }
+};
+
+// --- Edit Event (Populate Form) ---
+window.editEvent = (id) => {
+    const event = events.find(e => e.id == id);
+    if (!event) return;
+
+    document.getElementById('eventId').value = event.id;
+    document.getElementById('eventName').value = event.name;
+    document.getElementById('duration').value = event.duration;
+    document.getElementById('venueAddress').value = event.venueAddress;
+    document.getElementById('venueCapacity').value = event.venueCapacity || '';
+    document.getElementById('ticketPrice').value = event.ticketPrice;
+
+    if(event.date) {
+        const d = new Date(event.date);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        document.getElementById('eventDate').value = `${yyyy}-${mm}-${dd}`;
     }
 
-    // 3. Show the section
+    const btn = document.getElementById('createEventBtn');
+    btn.innerText = "Update Event";
+    btn.onclick = createNewEvent;
+
     showSection('createEvent');
 };
 
-// --- Helper for Details ---
+window.openCreateEventPage = () => {
+    document.querySelectorAll('#createEvent input').forEach(i => i.value = '');
+    const btn = document.getElementById('createEventBtn');
+    if(btn) btn.innerText = "Create Event";
+    showSection('createEvent');
+};
+
+// --- Book Ticket ---
+window.confirmTicketBooking = async (eventName) => {
+    const bookingData = {
+        eventId: currentEventId,
+        attendeeId: currentUser ? currentUser.id : 'GUEST',
+        bookingDate: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/bookings`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bookingData)
+        });
+
+        if (response.ok) {
+            document.getElementById('bookedEventName').innerText = eventName;
+            document.getElementById('bookedEventDate').innerText = 'Event Date: ' + new Date(currentEventDate).toLocaleDateString();
+            showSection('ticketConfirmPage');
+        } else {
+            const errorMessage = await response.text();
+            alert(errorMessage);
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Booking System Error.');
+    }
+};
+
+// --- Helper: Load Details for View & Book Page ---
 window.loadEventDetails = (eventId) => {
-    // FIX 1: Use '==' instead of '===' to match String ID with Number ID
     const event = events.find(e => e.id == eventId);
 
     if (!event) {
@@ -509,25 +422,17 @@ window.loadEventDetails = (eventId) => {
     currentEventId = event.id;
     currentEventDate = event.date;
 
-    // Update Title
     document.getElementById('detailEventTitle').innerText = event.name;
-
-    // FIX 2: Target '.detail-text span' instead of just 'span'
-    // This ensures we update the VALUE, not the ICON.
     document.getElementById('detailVenue').querySelector('.detail-text span').innerText = event.venueAddress;
     document.getElementById('detailDate').querySelector('.detail-text span').innerText = new Date(event.date).toLocaleDateString();
     document.getElementById('detailDuration').querySelector('.detail-text span').innerText = event.duration;
 
-    // Handle Capacity (Optional check in case it's missing)
     const capacitySpan = document.getElementById('detailCapacity').querySelector('.detail-text span');
-    if (capacitySpan) capacitySpan.innerText = event.venueCapacity || 'N/A';
+    if(capacitySpan) capacitySpan.innerText = event.venueCapacity || 'N/A';
 
-    // Price has a specific class .price-tag, so this one was actually okay, but good to double-check
     document.getElementById('detailPrice').querySelector('.price-tag').innerText = `$${event.ticketPrice}`;
-
     document.getElementById('detailId').querySelector('.detail-text span').innerText = event.id;
 
-    // Update the Book Button
     document.getElementById('bookTicketBtn').onclick = () => confirmTicketBooking(event.name);
 };
 
@@ -538,13 +443,13 @@ window.setRating = (rating) => {
     });
 };
 
-// --- Event Listeners (Binding Buttons to Functions) ---
+// --- Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
     showSection('home');
 
     document.getElementById('attendeeRegisterBtn').addEventListener('click', registerAttendee);
     document.getElementById('attendeeLoginBtn').addEventListener('click', loginAttendee);
-    document.getElementById('organizerRegisterBtn').addEventListener('click', registerOrganizer);
+    // Removed Organizer Register listener
     document.getElementById('organizerLoginBtn').addEventListener('click', loginOrganizer);
     document.getElementById('createEventBtn').addEventListener('click', createNewEvent);
     document.getElementById('submitFeedbackBtn').addEventListener('click', submitFeedback);
